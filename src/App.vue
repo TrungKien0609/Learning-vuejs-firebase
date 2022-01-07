@@ -3,7 +3,7 @@
     <div class="app">
       <Navigation v-if="navigation" />
       <router-view />
-      <Footer  v-if="navigation" />
+      <Footer v-if="navigation" />
     </div>
   </div>
 </template>
@@ -11,6 +11,8 @@
 <script>
 import Navigation from "./components/Navigation.vue";
 import Footer from "./components/Footer.vue";
+import firebase from "firebase/app";
+import "firebase/auth";
 export default {
   name: "app",
   components: {
@@ -23,6 +25,13 @@ export default {
     };
   },
   created() {
+    firebase.auth().onAuthStateChanged((user) => {
+      this.$store.commit("updateUser",user);
+      if(user){
+        this.$store.dispatch("getCurrentUser")
+        console.log(this.$store.state.profileEmail);
+      }
+    })
     this.checkRoute();
   },
   mounted() {},
@@ -34,9 +43,9 @@ export default {
         this.$route.name === "ForgotPassWord"
       ) {
         this.navigation = false;
-        return
+        return;
       }
-      this.navigation = true ;
+      this.navigation = true;
     },
   },
   watch: {
@@ -118,7 +127,7 @@ button,
   cursor: none !important;
   background-color: rgba(128, 128, 128, 0.5) !important;
 }
-.error{
+.error {
   text-align: center;
   font-size: 12px;
   color: red;

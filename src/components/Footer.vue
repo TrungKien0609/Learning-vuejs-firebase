@@ -53,6 +53,11 @@ export default {
     instagram,
     linkedin,
   },
+   computed: {
+    user(){
+      return this.$store.state.user ;
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

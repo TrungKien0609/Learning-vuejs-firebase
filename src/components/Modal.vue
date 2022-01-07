@@ -12,7 +12,7 @@ export default {
     props:["modalMessage"],
     methods:{
         closeModal(){
-            this.$emit('close-modal');
+            this.$emit('closeModal');
         }
     }
 }
@@ -23,8 +23,8 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 10;
-    position: absolute;
+    z-index: 10000;
+    position: fixed;
     width: 100%;
     height: 100%;
     top: 0;

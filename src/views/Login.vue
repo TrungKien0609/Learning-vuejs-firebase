@@ -17,11 +17,14 @@
           <input type="password" placeholder="Password" v-model="password" />
           <password class="icon" />
         </div>
+        <div class="error" v-show="error">
+          {{ this.errorMsg }}
+        </div>
       </div>
       <router-link class="forgot-password" :to="{ name: 'ForgotPassWord' }">
         Forgot your password
       </router-link>
-      <button>Sign In</button>
+      <button @click.prevent="signIn">Sign In</button>
       <div class="angle"></div>
     </form>
     <div class="background"></div>
@@ -30,6 +33,8 @@
 <script>
 import email from "../assets/Icons/envelope-regular.svg";
 import password from "../assets/Icons/lock-alt-solid.svg";
+import firebase from "firebase/app";
+import "firebase/auth";
 export default {
   name: "Login",
   components: {
@@ -40,7 +45,25 @@ export default {
     return {
       email: null,
       password: null,
+      error: null,
+      errorMsg: "",
     };
+  },
+  methods: {
+    async signIn() {
+      await firebase
+        .auth()
+        .signInWithEmailAndPassword(this.email, this.password)
+        .then(() => {
+          this.$router.push({ name: "Home" });
+          this.error = false;
+          this.errorMsg = "";
+        })
+        .catch((err) => {
+          this.error = true;
+          this.errorMsg = err.message;
+        });
+    },
   },
 };
 </script>
@@ -121,29 +144,29 @@ export default {
         border-color: #303030;
       }
     }
-    .angle{
-        display: none;
-        position: absolute;
-        background-color: #fff;
-        transform: rotateZ(3deg);
-        width: 60px;
-        right: -30px;
-        height: 101%;
-        @media (min-width: 900px){
-            display: initial;
-        }
+    .angle {
+      display: none;
+      position: absolute;
+      background-color: #fff;
+      transform: rotateZ(3deg);
+      width: 60px;
+      right: -30px;
+      height: 101%;
+      @media (min-width: 900px) {
+        display: initial;
+      }
     }
   }
-  .background{
-      display: none;
-      flex: 2;
-      background-size: cover;
-      background-image: url("../assets/background.png");
-      width: 100% ;
-      height: 100%;
-      @media (min-width: 900px){
-          display: initial;
-      }
+  .background {
+    display: none;
+    flex: 2;
+    background-size: cover;
+    background-image: url("../assets/background.png");
+    width: 100%;
+    height: 100%;
+    @media (min-width: 900px) {
+      display: initial;
+    }
   }
 }
 </style>

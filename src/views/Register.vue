@@ -76,18 +76,20 @@ export default {
       ) {
         this.error = false;
         this.errorMsg = "";
-        const firebaseAuth = await firebase.auth(); // nếu xác thực thành công mới xuống dòng code dưới
-        const createUser = await firebaseAuth.createUserWithEmailAndPassword( // create user
+        const firebaseAuth = await firebase.auth(); // nếu xác thực thành công mới xuống dòng code dưới ( validate ,xac thuc login,.....)
+        const createUser = await firebaseAuth.createUserWithEmailAndPassword(
+          // create user
           this.email,
           this.password
         );
-        const database = db.collection("users").doc(createUser.user.uid);//createUser.user.uid là userID tự custom. Nếu để doc() thì firsebase sẽ tự động tạo unique ID
-        await database.set({
-          firstName: this.fistName,
-          lastName: this.lastName,
-          userName: this.userName,
-          email: this.email,
-        });
+        const database = db.collection("users").doc(createUser.user.uid); //createUser.user.uid là userID tự custom. Nếu để doc() thì firsebase sẽ tự động tạo unique ID
+        database
+          .set({
+            firstName: this.fistName,
+            lastName: this.lastName,
+            userName: this.userName,
+            email: this.email,
+          })
         this.$router.push({ name: "Home" }); // redirect to home. vue router
         return;
       }
